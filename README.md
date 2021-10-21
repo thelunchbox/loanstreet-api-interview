@@ -29,10 +29,7 @@ _You do not need to provide a web frontend!_
 * Write your client in a language other than the one used to write the server
 
 ## Delivery
-Please push your code to the branch provided to you by your recruiter.
-
-_**Please contact careers@loan-street.com if you have not yet received a branch.**_
-
+_**Please send your submission to eng.interview@loan-street.com**_
 ## Discussion
 
 This project will assist fellow engineers in getting to know you and your work.
