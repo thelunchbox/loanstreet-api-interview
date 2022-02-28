@@ -6,19 +6,21 @@ allowing them to quickly produce accurate and beautiful reports.
 They would like to apply LoanStreet's logic to all of their loans,
 a huge win for LoanStreet's business!
 We've all agreed that an API would be the best tool,
-and you have been tasked with creating a proof-of-concept.
+and you have been tasked with creating an MVP (minimum viable product) for our customers.
 
 _**PLEASE DO NOT WORK MORE THAN SIX HOURS ON THIS PROJECT**_
 
 ## Requirements
-* The deliverable shall include a web server that supports the following actions:
+* Implement the API in the framework or language that you're most comfortable with
+* The deliverable shall include a web server that supports the following CRU(D) operations:
     * Create a loan with the following properties as input:
         * Amount
         * Interest rate
         * Length of loan in months
         * Monthly payment amount
-    * Get a loan created using the above action
-    * Update a loan created using the above action
+    * Get the created loan, by an identifier
+    * Update the created loan, by an identifier
+* **Out of scope**: Delete, Authentication, Authorization
 * The deliverable shall include a sample programmatic client for the aforementioned server  
 _See [here](https://github.com/PyGithub/PyGithub) for an example_
 
@@ -42,3 +44,4 @@ interview process.  Please be prepared to answer questions such as:
 * What are the strengths and weaknesses of ABC framework?
 * How is XYZ persistence layer well-suited to your data model?
 * What situations may result in failure?
+* What considerations have you made in terms of a creating customer facing production application?
