@@ -1,6 +1,6 @@
 const express = require('express');
 const uuid = require('uuid.v4');
-const snakecase = require('snake-case');
+const { snakeCase } = require('snake-case');
 const { Pool } = require('pg');
 
 const { updateDatabase } = require('./db');
@@ -26,6 +26,8 @@ console.log(dbCredentials);
 
 const port = process.env.PORT || 8080;
 
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(express.static(__dirname));
 
 // setup connection pool
@@ -48,7 +50,7 @@ app.post('/api/loan', async (req, res) => {
 
   // save loan to database
   await pool.query(
-    'INSERT INTO loans(id, amount, interest_rate, term, payment) VALUES ($1, $2, $3, $4, $5)',
+    'INSERT INTO loan(id, amount, interest_rate, term, payment) VALUES ($1, $2, $3, $4, $5)',
     [id, amount, interestRate, term, payment]
   );
 
@@ -58,9 +60,8 @@ app.post('/api/loan', async (req, res) => {
 app.get('/api/loan/:id', async (req, res) => {
   console.log('GET /api/loan/:id', req.params);
   const { id } = req.params;
-  const result = await pool.query('SELECT * FROM loans WHERE id = $1', [id]);
-  const [_, amount, interestRate, term, payment] = result.rows[0];
-  res.json({ id, amount, interestRate, term, payment });
+  const result = await pool.query('SELECT * FROM loan WHERE id = $1', [id]);
+  res.json(result.rows[0]);
 });
 
 app.patch('/api/loan/:id', async (req, res) => {
@@ -70,10 +71,12 @@ app.patch('/api/loan/:id', async (req, res) => {
   const values = [];
   const setters = [];
   Object.entries(body).forEach(([key, value]) => {
-    setters.push(`${snakecase(key)}=$${values.length + 1}`);
+    setters.push(`${snakeCase(key)}=$${values.length + 1}`);
     values.push(value);
   });
-  await pool.query(`UPDATE loans SET ${setters.join(' ')} WHERE id = $${values.length + 1}`, [...values, id]);
+  const fullQuery = `UPDATE loan SET ${setters.join(', ')} WHERE id = $${values.length + 1}`;
+  console.log(fullQuery, values, id);
+  await pool.query(fullQuery, [...values, id]);
   res.json(true);
 });
 

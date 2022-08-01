@@ -13,6 +13,7 @@ const COMMANDS = {
   ADD: 'add',
   GET: 'get',
   UPDATE: 'update',
+  QUIT: 'quit',
 };
 
 const properties = [
@@ -45,13 +46,15 @@ const properties = [
 
 const addLoan = async () => {
   const loanDetails = await prompts(properties);
-
+  console.log('ADDING LOAN DETAILS', loanDetails);
+  
   const response = await fetch(`${API_HOST}/api/loan`, {
     method: 'POST',
     body: JSON.stringify(loanDetails),
     headers: { 'Content-Type': 'application/json' },
   });
   const data = await response.json();
+  console.log(data);
 }
 
 const getLoan = async () => {
@@ -63,6 +66,7 @@ const getLoan = async () => {
 
   const response = await fetch(`${API_HOST}/api/loan/${id}`);
   const loan = await response.json();
+  console.log(loan);
 }
 
 const updateLoan = async () => {
@@ -75,7 +79,7 @@ const updateLoan = async () => {
     },
     {
       type: 'multiselect',
-      name: 'key',
+      name: 'keys',
       message: 'Which fields would you like to update?',
       choices: [
         { title: 'Loan Amount', value: 'amount' },
@@ -85,7 +89,7 @@ const updateLoan = async () => {
       ],
     },
   ]);
-
+  console.log(keys);
   const valuePrompts = properties.filter((property) => keys.includes(property.name));
   const loanDetails = await prompts(valuePrompts);
 
@@ -105,6 +109,7 @@ const mainLoop = async () => {
       { title: 'Add Loan', value: COMMANDS.ADD },
       { title: 'Get Loan', value: COMMANDS.GET },
       { title: 'Update Loan', value: COMMANDS.UPDATE },
+      { title: 'Quit', value: COMMANDS.QUIT },
     ],
   });
 
@@ -117,6 +122,9 @@ const mainLoop = async () => {
       break;
     case COMMANDS.UPDATE:
       await updateLoan();
+      break;
+    case COMMANDS.QUIT:
+      process.exit();
       break;
   }
   setImmediate(mainLoop); // so we don't add to the call stack
